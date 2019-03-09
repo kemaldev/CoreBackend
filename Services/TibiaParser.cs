@@ -11,7 +11,7 @@ namespace Services
     {
         public TibiaCharacter GetTibiaCharacter(string charName)
         {
-            string formattedName = charName.Replace(" ", "+");
+            string formattedName = charName.Replace("\u00A0", "+");
             string path = @"https://secure.tibia.com/community/?subtopic=characters&name=" + formattedName;
             HtmlWeb web = new HtmlWeb();
             var htmlDoc = web.Load(path);
@@ -25,31 +25,28 @@ namespace Services
                 switch(rowTitle)
                 {
                     case "Vocation:":
-                        tibiaCharacter.Vocation = row.NextSibling.InnerText;
+                        tibiaCharacter.Vocation = HtmlEntity.DeEntitize(row.NextSibling.InnerText);
                         break;
                     case "Level:":
-                        tibiaCharacter.Level = Int32.Parse(row.NextSibling.InnerText);
+                        tibiaCharacter.Level = Int32.Parse(HtmlEntity.DeEntitize(row.NextSibling.InnerText));
                         break;
                     case "World:":
-                        tibiaCharacter.World = row.NextSibling.InnerText;
+                        tibiaCharacter.World = HtmlEntity.DeEntitize(row.NextSibling.InnerText);
                         break;
                     case "Residence:":
-                        tibiaCharacter.Residence = row.NextSibling.InnerText;
+                        tibiaCharacter.Residence = HtmlEntity.DeEntitize(row.NextSibling.InnerText);
                         break;
                     case "Guild&#160;Membership:":
-                        tibiaCharacter.GuildName = row.NextSibling.InnerText;
+                        tibiaCharacter.GuildName = HtmlEntity.DeEntitize(row.NextSibling.InnerText);
                         break;
                     case "Last Login:":
-                        string[] lastLoginSplitted = row.NextSibling.InnerText.Split(new string[] { "&#160;" }, StringSplitOptions.None);
+                        string[] lastLoginSplitted = HtmlEntity.DeEntitize(row.NextSibling.InnerText).Split('\u00A0');
                         string year = lastLoginSplitted[2].Substring(0, lastLoginSplitted[2].Length - 1);
                         DateTime dt = DateTime.ParseExact(year + "-" + lastLoginSplitted[0] + "-" + lastLoginSplitted[1] + " " + lastLoginSplitted[3],
                             "yyyy-MMM-dd HH:mm:ss",
                             CultureInfo.InvariantCulture);
                         tibiaCharacter.LastLogin = dt;
                         break;
-
-
-
                 }
             }
 
@@ -69,7 +66,7 @@ namespace Services
 
             foreach(HtmlNode row in htmlDoc.DocumentNode.SelectNodes("//table[@class='Table3']//tr[@bgcolor='#F1E0C6']/td//a"))  
             {
-                string characterName = row.InnerText.Replace("&#160;", " ");
+                string characterName = HtmlEntity.DeEntitize(row.InnerText);
                 TibiaCharacter character = GetTibiaCharacter(characterName);
                 characters.Add(character);
             }
@@ -89,7 +86,7 @@ namespace Services
 
             foreach (HtmlNode row in htmlDoc.DocumentNode.SelectNodes("//table[@class='Table2']//tr[@class='Odd' or @class='Even']/td//a[not(@name)]"))
             {
-                string characterName = row.InnerText.Replace("&#160;", " ");
+                string characterName = HtmlEntity.DeEntitize(row.InnerText);
                 TibiaCharacter character = GetTibiaCharacter(characterName);
                 characters.Add(character);
             }
