@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Models
 {
-    class TibiaCharacter
+    public class TibiaCharacter
     {
         public string Name { get; set; }
         public string GuildName { get; set; }
