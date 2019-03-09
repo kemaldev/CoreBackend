@@ -47,6 +47,17 @@ namespace Services
                             CultureInfo.InvariantCulture);
                         tibiaCharacter.LastLogin = dt;
                         break;
+                    case "Character Deaths":
+                        HtmlNode tdDate = row.ParentNode.NextSibling.FirstChild;
+                        HtmlNode tdKilledBy = row.ParentNode.NextSibling.LastChild;
+                        tibiaCharacter.LatestDeathBy = HtmlEntity.DeEntitize(tdKilledBy.InnerText);
+                        string[] lastDeathSplit = HtmlEntity.DeEntitize(tdDate.InnerText).Split('\u00A0');
+                        string deathYear = lastDeathSplit[2].Substring(0, lastDeathSplit[2].Length - 1);
+                        DateTime dtDeath = DateTime.ParseExact(deathYear + "-" + lastDeathSplit[0] + "-" + lastDeathSplit[1] + " " + lastDeathSplit[3],
+                            "yyyy-MMM-dd HH:mm:ss",
+                            CultureInfo.InvariantCulture);
+                        tibiaCharacter.LatestDeath = dtDeath;
+                        break;
                 }
             }
 
