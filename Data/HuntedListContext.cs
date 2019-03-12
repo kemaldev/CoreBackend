@@ -9,10 +9,7 @@ namespace Data
         public DbSet<TibiaCharacter> TibiaCharacter { get; set; }
         public DbSet<HuntingSpot> HuntingSpot { get; set; }
 
-        public HuntedListContext(DbContextOptions<HuntedListContext> options) : base(options)
-        {
-
-        }
+        public HuntedListContext(DbContextOptions<HuntedListContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

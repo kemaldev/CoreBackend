@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Services;
 
 namespace CoreBot.Controllers
 {
@@ -14,11 +15,12 @@ namespace CoreBot.Controllers
     [ApiController]
     public class ListController : ControllerBase
     {
-        private readonly HuntedListContext _context;
+        private IListRepository _listRepository;
 
-        public ListController(HuntedListContext context)
+        public ListController(IListRepository listRepository)
         {
-            _context = context;
+            _listRepository = listRepository;
+
         }
 
         // GET: api/HuntedList
@@ -26,7 +28,7 @@ namespace CoreBot.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
-            var huntedLists = await _context.HuntedList.AsNoTracking().ToListAsync();
+            var huntedLists = await _listRepository.AsyncGetAllHuntedLists();
             return Ok(huntedLists);
         }
 
@@ -35,7 +37,7 @@ namespace CoreBot.Controllers
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(int id)
         {
-            var huntedList = _context.HuntedList.Find(id);
+            var huntedList = _listRepository.GetHuntedList(id);
             return Ok(huntedList);
         }
 
@@ -47,8 +49,8 @@ namespace CoreBot.Controllers
             {
                 return BadRequest(ModelState);
             }
-            _context.HuntedList.Add(huntedList);
-            await _context.SaveChangesAsync();
+
+            await _listRepository.AsyncCreateHuntedList(huntedList);
 
             return Ok();
         }
@@ -57,8 +59,9 @@ namespace CoreBot.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, [FromBody] HuntedList huntedList)
         {
+            var list = await _listRepository.AsyncUpdateHuntedList(id, huntedList);
 
-            if(!_context.HuntedList.Any(t => t.Id == id))
+            if (list == null)
             {
                 return NotFound();
             }
@@ -68,9 +71,6 @@ namespace CoreBot.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.HuntedList.Update(huntedList);
-            await _context.SaveChangesAsync();
-
             return Ok();
         }
 
@@ -78,16 +78,12 @@ namespace CoreBot.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-
-            var huntedList = _context.HuntedList.Find(id);
+            var huntedList = await _listRepository.AsyncDeleteHuntedList(id);
 
             if(huntedList == null)
             {
                 return NotFound();
             }
-
-            _context.HuntedList.Remove(huntedList);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }

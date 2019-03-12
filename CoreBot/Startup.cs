@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
+using Services;
 
 namespace CoreBot
 {
@@ -22,6 +23,7 @@ namespace CoreBot
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<HuntedListContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
+            services.AddTransient<IListRepository, ListRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(options =>
                     options.SwaggerDoc("v1", new Info { Title = "Core API", Version = "v1" })
