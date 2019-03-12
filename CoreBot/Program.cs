@@ -15,10 +15,7 @@ namespace CoreBot
     {
         public static void Main(string[] args)
         {
-            TibiaParser parser = new TibiaParser();
-            parser.GetOnlineCharacters("Tortura");
-
-            //CreateWebHostBuilder(args).Build().Run();
+            CreateWebHostBuilder(args).Build().Run();
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
