@@ -6,6 +6,7 @@ namespace Models
 {
     public class TibiaCharacter
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string GuildName { get; set; }
         public string World { get; set; }
@@ -16,6 +17,7 @@ namespace Models
         public bool IsOnline { get; set; }
         public DateTime LastLogin { get; set; }
         public DateTime LatestDeath { get; set; }
-        public List<string> UsuallyHunts { get; set; }
+        public ICollection<HuntedListCharacter> HuntedListCharacters { get; set; }
+        public ICollection<HuntingSpotCharacter> HuntingSpotCharacters { get; set; }
     }
 }
