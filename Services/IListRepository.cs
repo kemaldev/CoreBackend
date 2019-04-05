@@ -1,5 +1,4 @@
-﻿using Data.Dbos;
-using Data.Dtos;
+﻿using Data.Dtos;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -12,13 +11,9 @@ namespace Services
     {
         List<HuntedListsDto> GetAllHuntedLists();
         HuntedListDto GetHuntedList(int id);
-
         Task<HuntedList> AddCharacterToListAsync(string characterName, int listId);
-
         Task<HuntedList> DeleteCharacterFromListAsync(int characterId, int listId);
-
         Task<HuntedList> DeleteGuildFromListAsync(string guildName, int listId);
-
         Task<HuntedList> AddGuildToListAsync(string guildName, int listId);
         Task CreateHuntedListAsync(string name);
         Task<HuntedList> UpdateHuntedListAsync(int id, String name);
