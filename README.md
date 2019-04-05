@@ -5,7 +5,7 @@ CoreBot Backend API is the backend part of the CoreBot which is an application y
 .NET Core Framework 2.2.0
 SQL Server Database
 
-### Installation
+## Installation
 Run the following commands in the Package Manager Console in Visual Studio in order to set the database up:
 ```sh
 $ Add-Migration InitialMigration
@@ -18,7 +18,7 @@ $ dotnet build
 $ dotnet run
 ```
 
-### API Endpoints
+## API Endpoints
 
 Following are the API Endpoints you can call in order to get certain information from the Tibia Website.
 
