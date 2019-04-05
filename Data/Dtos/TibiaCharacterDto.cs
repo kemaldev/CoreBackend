@@ -1,17 +1,12 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Models
+namespace Data.Dbos
 {
-    public class TibiaCharacter
+    public class TibiaCharacterDto
     {
-
-        public TibiaCharacter()
-        {
-            HuntedListCharacters = new List<HuntedListCharacter>();
-            HuntingSpotCharacters = new List<HuntingSpotCharacter>();
-        }
         public int Id { get; set; }
         public string Name { get; set; }
         public string GuildName { get; set; }
@@ -23,7 +18,6 @@ namespace Models
         public bool IsOnline { get; set; }
         public DateTime LastLogin { get; set; }
         public DateTime LatestDeath { get; set; }
-        public ICollection<HuntedListCharacter> HuntedListCharacters { get; set; }
         public ICollection<HuntingSpotCharacter> HuntingSpotCharacters { get; set; }
     }
 }

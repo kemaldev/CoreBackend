@@ -26,40 +26,79 @@ namespace CoreBot.Controllers
         // GET: api/HuntedList
         //Get all of the lists
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public  IActionResult GetListsAsync()
         {
-            var huntedLists = await _listRepository.AsyncGetAllHuntedLists();
+            var huntedLists =  _listRepository.GetAllHuntedLists();
             return Ok(huntedLists);
         }
 
         // GET: api/HuntedList/5
         //Get specific list by id
         [HttpGet("{id}", Name = "Get")]
-        public IActionResult Get(int id)
+        public IActionResult GetList(int id)
         {
             var huntedList = _listRepository.GetHuntedList(id);
+            if(huntedList == null)
+            {
+                return NotFound();
+            }
             return Ok(huntedList);
         }
 
         // POST: api/HuntedList
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] HuntedList huntedList)
+        public async Task<IActionResult> PostAsync([FromQuery] string name)
         {
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await _listRepository.AsyncCreateHuntedList(huntedList);
+            await _listRepository.CreateHuntedListAsync(name);
+
+            return Ok();
+        }
+
+        //POST: api/list/{id}/character
+        [HttpPost("{id}/character")]
+        public async Task<IActionResult> PostCharacterToListAsync([FromQuery] string charName, int id)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var huntedList = await _listRepository.AddCharacterToListAsync(charName, id);
+            if(huntedList == null) {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+
+        [HttpPost("{id}/guild")]
+        public async Task<IActionResult> PostGuildToListAsync([FromQuery] string guildName, int id)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var huntedList = await _listRepository.AddGuildToListAsync(guildName, id);
+            if(huntedList == null)
+            {
+                return BadRequest();
+            }
 
             return Ok();
         }
 
         // PUT: api/HuntedList/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, [FromBody] HuntedList huntedList)
+        public async Task<IActionResult> PutAsync(int id, [FromQuery] string name)
         {
-            var list = await _listRepository.AsyncUpdateHuntedList(id, huntedList);
+            var list = await _listRepository.UpdateHuntedListAsync(id, name);
 
             if (list == null)
             {
@@ -78,9 +117,36 @@ namespace CoreBot.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            var huntedList = await _listRepository.AsyncDeleteHuntedList(id);
+            var huntedList = await _listRepository.DeleteHuntedListAsync(id);
 
             if(huntedList == null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}/guild")]
+        public async Task<IActionResult> DeleteGuildAsync(int id, [FromQuery] string guildName)
+        {
+            var huntedList = await _listRepository.DeleteGuildFromListAsync(guildName, id);
+
+            if (huntedList == null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}/character")]
+        public async Task<IActionResult> DeleteCharacterFromListAsync(int id, [FromQuery] int charId)
+        {
+            var huntedList = await _listRepository.DeleteCharacterFromListAsync(charId, id);
+
+            if(huntedList == null) 
             {
                 return NotFound();
             }

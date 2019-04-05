@@ -22,9 +22,17 @@ namespace CoreBot
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<HuntedListContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
+            services.AddDbContext<HuntedListContext>(
+                options => options.UseSqlServer(
+                    Configuration.GetConnectionString("DBConnection"),
+                    sqlServerOptions => sqlServerOptions.MigrationsAssembly(nameof(Data))
+                )
+            );
+            services.AddTransient<TibiaParser>();
             services.AddTransient<IListRepository, ListRepository>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+            .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(options =>
                     options.SwaggerDoc("v1", new Info { Title = "Core API", Version = "v1" })
             );
