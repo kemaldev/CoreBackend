@@ -18,6 +18,6 @@ namespace Data.Dtos
         public bool IsOnline { get; set; }
         public DateTime LastLogin { get; set; }
         public DateTime LatestDeath { get; set; }
-        public ICollection<HuntingSpotCharacter> HuntingSpotCharacters { get; set; }
+        public ICollection<HuntingSpotDto> HuntingSpots { get; set; }
     }
 }

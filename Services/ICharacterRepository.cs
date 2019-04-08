@@ -9,7 +9,9 @@ namespace Services
 {
     public interface ICharacterRepository
     {
-        Task<TibiaCharacterDto> GetTibiaCharacterAsync(int id);
-        Task<TibiaCharacter> AddHuntingSpotToCharacter(int charId, int huntingSpotId);
+        List<TibiaCharacterItemDto> GetTibiaCharacters();
+        TibiaCharacterDto GetTibiaCharacter(int id);
+        Task<TibiaCharacter> AddHuntingSpotToCharacterAsync(int charId, int huntingSpotId);
+        Task<TibiaCharacter> DeleteHuntingSpotFromCharacterAsync(int charId, int huntingSpotId);
     }
 }

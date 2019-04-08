@@ -30,6 +30,8 @@ namespace CoreBot
             );
             services.AddTransient<TibiaParser>();
             services.AddTransient<IListRepository, ListRepository>();
+            services.AddTransient<ICharacterRepository, CharacterRepository>();
+            services.AddTransient<IHuntingSpotRepository, HuntingSpotRepository>();
             services.AddMvc()
             .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
