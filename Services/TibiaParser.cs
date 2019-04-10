@@ -46,8 +46,16 @@ namespace Services {
                 switch (rowTitle)
                 {
                     case "Vocation:":
-                        string vocation = HtmlEntity.DeEntitize(row.NextSibling.InnerText);
-                        tibiaCharacter.Vocation = vocation.Replace("\u00A0", " ");
+                        string vocation = HtmlEntity.DeEntitize(row.NextSibling.InnerText).Replace("\u00A0", " ");
+                        string[] promotedVocation = vocation.Split(' ');
+                        if (promotedVocation.Length == 2)
+                        {
+                            tibiaCharacter.Vocation = promotedVocation[1];
+                        }
+                        else
+                        {
+                            tibiaCharacter.Vocation = vocation;
+                        }
                         break;
                     case "Level:":
                         tibiaCharacter.Level = Int32.Parse(HtmlEntity.DeEntitize(row.NextSibling.InnerText));

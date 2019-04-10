@@ -88,7 +88,9 @@ namespace Services
                         Vocation = x.Vocation,
                         Level = x.Level,
                         IsOnline = x.IsOnline
-                    }).ToList()
+                    }).OrderBy(x => x.Vocation)
+                    .ThenByDescending(x => x.Level)
+                    .ToList()
                 }).FirstOrDefault(x => x.Id == id);
 
             if(huntedList == null)
